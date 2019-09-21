@@ -2,10 +2,11 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/DrawerMenu.vue'),
-    children: [
-      { path: '', component: () => import('pages/Index.vue') },
-    ],
+    component: () => import('pages/Index.vue'),
+  },
+  {
+    path: '/about',
+    component: () => import('pages/About.vue'),
   },
 ];
 
