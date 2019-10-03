@@ -27,7 +27,7 @@
       <q-scroll-area class="fit">
 
         <q-list :key="i" v-for="(menuItem, i) in menuList">
-          <q-item :to="menuItem.link" clickable v-ripple>
+          <q-item :to="menuItem.link" clickable exact v-ripple>
             <q-item-section avatar>
               <q-icon :name="menuItem.icon"/>
             </q-item-section>
@@ -35,7 +35,7 @@
               {{ menuItem.label }}
             </q-item-section>
           </q-item>
-          <q-separator v-if="menuItem.separator"/>
+          <!--          <q-separator v-if="menuItem.separator"/>-->
         </q-list>
       </q-scroll-area>
     </q-drawer>
@@ -54,13 +54,13 @@ const menuList = [
     icon: 'credit_card',
     label: 'RFID cards',
     separator: false,
-    link: 'about',
+    link: '/rfid',
   },
   {
     icon: 'face',
     label: 'Usuários',
     separator: false,
-    link: 'users',
+    link: '/users',
   },
 ];
 

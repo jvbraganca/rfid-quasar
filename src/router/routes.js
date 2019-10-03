@@ -5,8 +5,12 @@ const routes = [
     component: () => import('pages/Index.vue'),
   },
   {
-    path: '/about',
-    component: () => import('pages/About.vue'),
+    path: '/rfid',
+    component: () => import('pages/RFID.vue'),
+  },
+  {
+    path: '/users',
+    component: () => import('pages/Users.vue'),
   },
 ];
 

@@ -19,5 +19,8 @@
     components: {
       DrawerMenu,
     },
+    mounted() {
+      console.log(this.$firebase);
+    },
 };
 </script>
