@@ -3,9 +3,9 @@
 </template>
 
 <script>
-  export default {
-    name: 'RFID',
-  };
+export default {
+  name: 'RFID',
+};
 </script>
 
 <style scoped>

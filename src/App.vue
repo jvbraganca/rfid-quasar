@@ -4,7 +4,7 @@
       <DrawerMenu/>
       <q-page-container>
         <q-page padding>
-          <router-view/>
+          <router-view />
         </q-page>
       </q-page-container>
     </q-layout>
@@ -12,15 +12,15 @@
 </template>
 
 <script>
-  import DrawerMenu from './layouts/DrawerMenu';
+import DrawerMenu from './layouts/DrawerMenu';
 
-  export default {
-    name: 'App',
-    components: {
-      DrawerMenu,
-    },
-    mounted() {
-      console.log(this.$firebase);
-    },
+export default {
+  name: 'App',
+  components: {
+    DrawerMenu,
+  },
+  mounted() {
+    console.log(this.$firebase);
+  },
 };
 </script>
