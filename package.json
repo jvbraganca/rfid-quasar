@@ -1,6 +1,6 @@
 {
   "name": "rfid-quasar",
-  "version": "0.0.1",
+  "version": "1.6.1",
   "description": "Implementação de RFID",
   "productName": "IFMG RFID",
   "cordovaId": "org.cordova.quasar.app",
