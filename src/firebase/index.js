@@ -12,6 +12,8 @@ export const firebaseApp = firebase.initializeApp({
   appId: process.env.VUE_APP_APP_ID,
 });
 
+export const db = firebaseApp.firestore();
+
 // Exporta o firebase para ser usado como $firebase em qualquer diretório
 export default function install(Vue) {
   Object.defineProperty(Vue.prototype, '$firebase', {

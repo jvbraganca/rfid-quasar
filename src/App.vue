@@ -1,9 +1,9 @@
 <template>
   <div class="q-gutter-md" id="q-app">
-    <q-layout view="hHh lpR lff">
+    <q-layout view="hhh lpR lFf">
       <DrawerMenu/>
       <q-page-container>
-        <q-page padding>
+        <q-page class="q-pa-md">
           <router-view />
         </q-page>
       </q-page-container>
@@ -20,7 +20,6 @@ export default {
     DrawerMenu,
   },
   mounted() {
-    console.log(this.$firebase);
   },
 };
 </script>

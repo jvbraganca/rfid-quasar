@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-header class="bg-positive text-white" elevated>
+    <q-header class="bg-positive text-white" reveal elevated>
       <q-toolbar>
         <q-btn
           @click="leftDrawerOpen = !leftDrawerOpen"
@@ -13,9 +13,10 @@
         <q-toolbar-title>
           IFMG - RFID
         </q-toolbar-title>
-        <div>
-          <q-btn color="white" flat label="Login"/>
-        </div>
+<!--    Botao login    -->
+<!--        <div>-->
+<!--          <q-btn color="white" flat label="Login"/>-->
+<!--        </div>-->
       </q-toolbar>
     </q-header>
     <q-drawer
