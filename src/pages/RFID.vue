@@ -4,11 +4,14 @@
       <h3>RFID</h3>
       <q-table
         title="Logbook"
+        :config="config"
         :data="data"
         :columns="columns"
-        row-key="uid"
+        :row-key="uid"
         :pagination.sync="pagination"
-      />
+      >
+        <slot no-data-label>{{ config.messages.noData }}</slot>
+      </q-table>
     </div>
   </div>
 </template>
@@ -25,7 +28,12 @@ moment.locale('pt-br');
 export default {
   name: 'RFID',
   created() {
-    this.populateLogbookTable();
+    // Vigia mutações e atualiza os dados todas as vezes que um novo dado for inserido
+    this.$store.subscribe((mutation) => {
+      if (mutation.type === 'logbook/setLogbookData') {
+        this.populateLogbookTable();
+      }
+    });
   },
   mounted() {
     this.getLogbookData();
@@ -37,6 +45,7 @@ export default {
     ...mapActions('logbook', ['getLogbookData']),
     // Função para pegar os dados do logbook e popular na tabela
     populateLogbookTable() {
+      this.data = [];
       this.logbookData.forEach((datum) => {
         /* eslint no-underscore-dangle: ["error", { "allow": ["_binaryString", "sender_id"] }] */
         this.data.push({
@@ -91,6 +100,11 @@ export default {
       ],
       data: [
       ],
+      config: {
+        messages: {
+          noData: 'Atenção: Não foram encontrados nenhum registro no banco de dados.',
+        },
+      },
     };
   },
 };
