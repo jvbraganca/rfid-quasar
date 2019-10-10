@@ -1,23 +1,16 @@
 w<template>
   <div>
     <div>
-      <h3>RFID</h3>
+      <h3>Dispositivos cadastrados</h3>
       <q-table
-        title="Logbook"
+        title="Dispositivos"
         :config="config"
         :data="data"
         :columns="columns"
         :row-key="uid"
         :pagination.sync="pagination"
       >
-        <template v-slot:no-data="props">
-          <q-banner class="bg-warning text-center col-12">
-            <template v-slot:avatar>
-              <q-icon class="float-right" :name="props.icon" color="black" />
-            </template>
-            <a class="text-weight-bolder">Atenção: </a> {{ config.messages.noData }}
-          </q-banner>
-        </template>
+        <slot no-data-label>{{ config.messages.noData }}</slot>
       </q-table>
     </div>
   </div>
@@ -33,33 +26,32 @@ const moment = require('moment');
 moment.locale('pt-br');
 
 export default {
-  name: 'RFID',
+  name: 'Devices',
   created() {
     // Vigia mutações e atualiza os dados todas as vezes que um novo dado for inserido
     this.$store.subscribe((mutation) => {
-      if (mutation.type === 'logbook/setLogbookData') {
-        this.populateLogbookTable();
+      if (mutation.type === 'devices/appendDevices') {
+        this.populateDevicesTable();
       }
     });
   },
   mounted() {
-    this.getLogbookData();
+    this.getDevices();
   },
   computed: {
-    ...mapState('logbook', ['logbookData']),
+    ...mapState('devices', ['devices']),
   },
   methods: {
-    ...mapActions('logbook', ['getLogbookData']),
+    ...mapActions('devices', ['getDevices']),
     // Função para pegar os dados do logbook e popular na tabela
-    populateLogbookTable() {
+    populateDevicesTable() {
       this.data = [];
-      this.logbookData.forEach((datum) => {
-        /* eslint no-underscore-dangle: ["error", { "allow": ["_binaryString", "sender_id"] }] */
+      this.devices.forEach((datum) => {
+      /* eslint no-underscore-dangle: ["error", { "allow": ["_binaryString", "sender_id"] }] */
         this.data.push({
           uid: datum.id,
-          card_id: datum.cardUid._binaryString,
-          timestamp: moment.unix(datum.timestamp).format('llll'),
-          local: datum.sender_id._binaryString,
+          name: datum.name,
+          timestamp: moment.unix(datum.timestamp).format('DD MMMM YYYY, h:mm:ss'),
         });
       });
     },
@@ -80,36 +72,28 @@ export default {
           sortable: true,
         },
         {
-          name: 'card_id',
+          name: 'name',
           required: true,
-          label: 'Card ID',
-          align: 'left',
-          field: row => row.card_id,
+          label: 'Nome do dispositivo',
+          align: 'center',
+          field: row => row.name,
           format: val => `${val}`,
           sortable: true,
         },
         {
           name: 'timestamp',
           required: true,
-          label: 'Horario',
-          align: 'left',
+          label: 'Último ping',
+          align: 'right',
           field: row => row.timestamp,
           format: val => `${val}`,
-        },
-        {
-          name: 'sender',
-          required: true,
-          label: 'Local',
-          align: 'left',
-          field: row => row.local,
-          sortable: true,
         },
       ],
       data: [
       ],
       config: {
         messages: {
-          noData: 'Não foram encontrados nenhum registro no banco de dados.',
+          noData: 'Atenção: Não foram encontrados nenhum registro no banco de dados.',
         },
       },
     };

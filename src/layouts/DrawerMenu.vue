@@ -58,6 +58,12 @@ const menuList = [
     link: '/rfid',
   },
   {
+    icon: 'devices',
+    label: 'Dispositivos',
+    separator: false,
+    link: '/devices',
+  },
+  {
     icon: 'face',
     label: 'Usuários',
     separator: false,
