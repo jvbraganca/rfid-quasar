@@ -10,7 +10,14 @@
         :row-key="uid"
         :pagination.sync="pagination"
       >
-        <slot no-data-label>{{ config.messages.noData }}</slot>
+        <template v-slot:no-data="props">
+          <q-banner class="bg-warning text-center col-12">
+            <template v-slot:avatar>
+              <q-icon class="float-right" :name="props.icon" color="black" />
+            </template>
+            <a class="text-weight-bolder">Atenção: </a> {{ config.messages.noData }}
+          </q-banner>
+        </template>
       </q-table>
     </div>
   </div>
@@ -102,7 +109,7 @@ export default {
       ],
       config: {
         messages: {
-          noData: 'Atenção: Não foram encontrados nenhum registro no banco de dados.',
+          noData: 'Não foram encontrados nenhum registro no banco de dados.',
         },
       },
     };
