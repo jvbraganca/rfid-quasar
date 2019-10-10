@@ -12,6 +12,10 @@ const routes = [
     path: '/users',
     component: () => import('pages/Users.vue'),
   },
+  {
+    path: '/devices',
+    component: () => import('pages/Devices.vue'),
+  },
 ];
 
 // Always leave this as last one

@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import logbook from './logbook';
+import devices from './devices';
 
 Vue.use(Vuex);
 
@@ -13,6 +14,7 @@ export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
       logbook,
+      devices,
     },
 
     // enable strict mode (adds overhead!)
