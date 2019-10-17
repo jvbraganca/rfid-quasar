@@ -15,3 +15,7 @@ export function getLogbookData({ commit }) {
     commit('setLogbookData', tempData);
   });
 }
+
+export function changeDialogState({ commit }, payload) {
+  commit('dialogAddUser', payload);
+}

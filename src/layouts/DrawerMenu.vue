@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-header class="bg-positive text-white" reveal elevated>
+    <q-header class="bg-primary text-white" reveal elevated>
       <q-toolbar>
         <q-btn
           @click="leftDrawerOpen = !leftDrawerOpen"
@@ -11,7 +11,8 @@
           round
         />
         <q-toolbar-title>
-          IFMG - RFID
+          <span class="text-weight-bold">ATHENA</span>
+          <span class="text-weight-light text-body1">IFMG</span>
         </q-toolbar-title>
 <!--    Botao login    -->
 <!--        <div>-->

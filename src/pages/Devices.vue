@@ -10,8 +10,60 @@ w<template>
         :row-key="uid"
         :pagination.sync="pagination"
       >
-        <slot no-data-label>{{ config.messages.noData }}</slot>
+        <template v-slot:top="props">
+          <h5>Dispositivos</h5>
+          <q-space />
+          <q-btn
+            outline
+            color="primary"
+            @click="dialogAddDevice(true)"
+          >
+            Adicionar dispositivo
+          </q-btn>
+        </template>
+        <template v-slot:no-data="props">
+          <q-banner class="bg-warning text-center col-12">
+            <template v-slot:avatar>
+              <q-icon class="float-right" :name="props.icon" color="black" />
+            </template>
+            <a class="text-weight-bolder">Atenção: </a> {{ config.messages.noData }}
+          </q-banner>
+        </template>
+        <template slot='col-action' slot-scope='cell'>
+          <button @click='on_edit(cell)'><i>edit</i></button>
+        </template>
       </q-table>
+    </div>
+<!--   Modal para adicionar novo dispositivo   -->
+    <div class="q-pa-md q-gutter-sm">
+      <q-dialog v-model="persistent" persistent transition-show="scale" transition-hide="scale">
+        <q-card class="bg-positive text-white" style="width: 600px">
+          <q-card-section>
+            <div class="text-h6">
+              Adicionando novo dispositivo
+            </div>
+          </q-card-section>
+            <q-card-section class="bg-white text-black">
+              <div class="q-pt-md">
+                <q-input
+                  color="positive"
+                  v-model="newDeviceName"
+                  label="Nome do dispositivo"
+                  aria-required="true"
+                />
+              </div>
+            </q-card-section>
+          <q-card-actions align="left" class="bg-white text-positive">
+            <q-btn flat color="negative" label="Cancelar" @click="dialogAddDevice(false)"/>
+            <q-space />
+            <q-btn
+              flat
+              label="Cadastrar"
+              @click="addNewDevice(newDeviceName), dialogAddDevice(false), newDeviceName=''"
+            />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </div>
   </div>
 </template>
@@ -37,12 +89,13 @@ export default {
   },
   mounted() {
     this.getDevices();
+    this.populateDevicesTable();
   },
   computed: {
-    ...mapState('devices', ['devices']),
+    ...mapState('devices', ['devices', 'newDeviceId', 'persistent']),
   },
   methods: {
-    ...mapActions('devices', ['getDevices']),
+    ...mapActions('devices', ['getDevices', 'addNewDevice', 'dialogAddDevice']),
     // Função para pegar os dados do logbook e popular na tabela
     populateDevicesTable() {
       this.data = [];
@@ -51,13 +104,14 @@ export default {
         this.data.push({
           uid: datum.id,
           name: datum.name,
-          timestamp: moment.unix(datum.timestamp).format('DD MMMM YYYY, h:mm:ss'),
+          timestamp: moment.unix(datum.timestamp).format('DD MMMM YYYY, H:mm:ss'),
         });
       });
     },
   },
   data() {
     return {
+      newDeviceName: '',
       pagination: {
         rowsPerPage: 10, // current rows per page being displayed
       },
@@ -78,14 +132,21 @@ export default {
           align: 'center',
           field: row => row.name,
           format: val => `${val}`,
-          sortable: true,
+        },
+        {
+          name: 'actions',
+          required: true,
+          label: 'Ação',
+          align: 'center',
+          field: row => row.timestamp,
+          format: val => `${val}`,
         },
         {
           name: 'timestamp',
           required: true,
           label: 'Último ping',
           align: 'right',
-          field: row => row.timestamp,
+          field: '',
           format: val => `${val}`,
         },
       ],

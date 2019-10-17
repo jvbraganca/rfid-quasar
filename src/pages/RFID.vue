@@ -1,4 +1,4 @@
-w<template>
+<template>
   <div>
     <div>
       <h3>RFID</h3>
@@ -10,6 +10,17 @@ w<template>
         :row-key="uid"
         :pagination.sync="pagination"
       >
+        <template v-slot:top="props">
+          <h5>Logbook</h5>
+          <q-space />
+          <q-btn
+            outline
+            color="primary"
+            @click="changeDialogState(true), $refs.carousel.goTo(1)"
+          >
+            Cadastrar cartão
+          </q-btn>
+        </template>
         <template v-slot:no-data="props">
           <q-banner class="bg-warning text-center col-12">
             <template v-slot:avatar>
@@ -19,6 +30,74 @@ w<template>
           </q-banner>
         </template>
       </q-table>
+    </div>
+    <div class="q-pa-md q-gutter-sm">
+      <q-dialog v-model="addUserDialog">
+        <q-carousel
+          transition-prev="slide-right"
+          transition-next="slide-left"
+          swipeable
+          animated
+          padding
+          v-model="slide"
+          style="width: 500px"
+          class="bg-white shadow-1 rounded-borders"
+          ref="carousel"
+        >
+          <q-carousel-slide :name="1" class="column no-wrap flex-center">
+            <q-icon name="style" color="primary" size="56px" />
+            <div class="q-mt-md text-center">
+             Alo
+            </div>
+          </q-carousel-slide>
+          <q-carousel-slide :name="2" class="column no-wrap flex-center">
+            <q-icon name="live_tv" color="primary" size="56px" />
+            <div class="q-mt-md text-center">
+              {{ lorem }}
+            </div>
+          </q-carousel-slide>
+          <q-carousel-slide :name="3" class="column no-wrap flex-center">
+            <q-icon name="layers" color="primary" size="56px" />
+            <div class="q-mt-md text-center">
+              {{ lorem }}
+            </div>
+          </q-carousel-slide>
+          <q-carousel-slide :name="4" class="column no-wrap flex-center">
+            <q-icon name="terrain" color="primary" size="56px" />
+            <div class="q-mt-md text-center">
+              {{ lorem }}
+            </div>
+          </q-carousel-slide>
+          <template v-slot:control>
+            <q-carousel-control
+              position="top-right"
+              :offset="[18, 18]"
+            >
+              <q-btn
+                flat
+                round
+                color="grey"
+                icon="close"
+                @click="changeDialogState(false)"
+              />
+            </q-carousel-control>
+            <q-carousel-control
+              position="bottom-right"
+              :offset="[18, 18]"
+              class="q-gutter-xs"
+            >
+              <q-btn
+                push round dense color="orange" text-color="black" icon="arrow_left"
+                @click="$refs.carousel.previous()"
+              />
+              <q-btn
+                push round dense color="orange" text-color="black" icon="arrow_right"
+                @click="$refs.carousel.next()"
+              />
+            </q-carousel-control>
+          </template>
+        </q-carousel>
+      </q-dialog>
     </div>
   </div>
 </template>
@@ -44,12 +123,13 @@ export default {
   },
   mounted() {
     this.getLogbookData();
+    this.populateLogbookTable();
   },
   computed: {
-    ...mapState('logbook', ['logbookData']),
+    ...mapState('logbook', ['logbookData', 'addUserDialog']),
   },
   methods: {
-    ...mapActions('logbook', ['getLogbookData']),
+    ...mapActions('logbook', ['getLogbookData', 'changeDialogState']),
     // Função para pegar os dados do logbook e popular na tabela
     populateLogbookTable() {
       this.data = [];
@@ -66,6 +146,7 @@ export default {
   },
   data() {
     return {
+      slide: 1,
       pagination: {
         rowsPerPage: 10, // current rows per page being displayed
       },
