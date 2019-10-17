@@ -10,17 +10,6 @@
         :row-key="uid"
         :pagination.sync="pagination"
       >
-        <template v-slot:top="props">
-          <h5>Logbook</h5>
-          <q-space />
-          <q-btn
-            outline
-            color="primary"
-            @click="changeDialogState(true), $refs.carousel.goTo(1)"
-          >
-            Cadastrar cartão
-          </q-btn>
-        </template>
         <template v-slot:no-data="props">
           <q-banner class="bg-warning text-center col-12">
             <template v-slot:avatar>
@@ -98,6 +87,26 @@
           </template>
         </q-carousel>
       </q-dialog>
+    </div>
+    <div>
+      <q-page-sticky position="bottom-right" :offset="[18, 18]">
+        <q-fab push color="positive" icon="add" direction="up">
+          <q-fab-action
+            push
+            text-color="primary"
+            color="white"
+            @click="changeDialogState(true), $refs.carousel.goTo(1)"
+            icon="playlist_add"
+          />
+          <q-fab-action
+            push
+            text-color="positive"
+            color="white"
+            @click="populateLogbookTable"
+            icon="refresh"
+          />
+        </q-fab>
+      </q-page-sticky>
     </div>
   </div>
 </template>

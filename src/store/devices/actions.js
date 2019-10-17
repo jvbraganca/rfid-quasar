@@ -1,7 +1,7 @@
 import { db } from '../../firebase';
 
 export function getDevices({ commit }) {
-  db.collection('devices').orderBy('name').onSnapshot((snapshot) => {
+  db.collection('devices').orderBy('name').get().then((snapshot) => {
     const tempData = [];
     snapshot.forEach((doc) => {
       const data = {

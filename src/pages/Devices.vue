@@ -10,17 +10,6 @@ w<template>
         :row-key="uid"
         :pagination.sync="pagination"
       >
-        <template v-slot:top="props">
-          <h5>Dispositivos</h5>
-          <q-space />
-          <q-btn
-            outline
-            color="primary"
-            @click="dialogAddDevice(true)"
-          >
-            Adicionar dispositivo
-          </q-btn>
-        </template>
         <template v-slot:no-data="props">
           <q-banner class="bg-warning text-center col-12">
             <template v-slot:avatar>
@@ -64,6 +53,26 @@ w<template>
           </q-card-actions>
         </q-card>
       </q-dialog>
+    </div>
+    <div>
+      <q-page-sticky position="bottom-right" :offset="[18, 18]">
+        <q-fab push color="positive" icon="add" direction="up">
+          <q-fab-action
+            push
+            text-color="primary"
+            color="white"
+            @click="dialogAddDevice(true)"
+            icon="playlist_add"
+          />
+          <q-fab-action
+            push
+            text-color="positive"
+            color="white"
+            @click="populateDevicesTable"
+            icon="refresh"
+          />
+        </q-fab>
+      </q-page-sticky>
     </div>
   </div>
 </template>
