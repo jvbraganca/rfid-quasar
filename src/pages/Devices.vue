@@ -29,7 +29,7 @@ w<template>
         <q-card class="bg-positive text-white" style="width: 600px">
           <q-card-section>
             <div class="text-h6">
-              Adicionando novo dispositivo
+              Adicionar novo dispositivo
             </div>
           </q-card-section>
             <q-card-section class="bg-white text-black">
@@ -43,12 +43,13 @@ w<template>
               </div>
             </q-card-section>
           <q-card-actions align="left" class="bg-white text-positive">
-            <q-btn flat color="negative" label="Cancelar" @click="dialogAddDevice(false)"/>
             <q-space />
+            <q-btn flat color="negative" label="Cancelar" @click="dialogAddDevice(false)"/>
             <q-btn
-              flat
+              color="positive"
+              text-color="white"
               label="Cadastrar"
-              @click="addNewDevice(newDeviceName), dialogAddDevice(false), newDeviceName=''"
+              @click="confirm"
             />
           </q-card-actions>
         </q-card>
@@ -56,13 +57,13 @@ w<template>
     </div>
     <div>
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-fab push color="positive" icon="add" direction="up">
+        <q-fab push color="primary" icon="add" direction="up">
           <q-fab-action
             push
             text-color="primary"
             color="white"
             @click="dialogAddDevice(true)"
-            icon="playlist_add"
+            icon="note_add"
           />
           <q-fab-action
             push
@@ -116,6 +117,31 @@ export default {
           timestamp: moment.unix(datum.timestamp).format('DD MMMM YYYY, H:mm:ss'),
         });
       });
+    },
+    confirm() {
+      this.$q.dialog({
+        title: 'Confirme o nome do dispositivo',
+        message: this.confirmMessage(),
+        persistent: true,
+        ok: {
+          label: 'Sim',
+          color: 'positive',
+          flat: true,
+        },
+        cancel: {
+          label: 'Cancelar',
+          color: 'positive',
+          flat: true,
+        },
+        html: true,
+      }).onOk(() => {
+        this.dialogAddDevice(this.newDeviceName);
+        this.dialogAddDevice(false);
+        this.newDeviceName = '';
+      });
+    },
+    confirmMessage() {
+      return `<span class="text-weight-bolder">${this.newDeviceName}</span> é o nome do dispositivo?`;
     },
   },
   data() {

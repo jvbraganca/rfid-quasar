@@ -23,6 +23,7 @@ export function addNewDevice({ commit }, payload) {
   }).then((doc) => {
     commit('setNewDeviceId', doc.id);
   }).catch((error) => {
+    // eslint-disable-next-line no-console
     console.log(`Erro ao adicionar documento: ${error}`);
   });
 }

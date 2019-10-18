@@ -90,13 +90,13 @@
     </div>
     <div>
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-fab push color="positive" icon="add" direction="up">
+        <q-fab push color="primary" icon="add" direction="up">
           <q-fab-action
             push
             text-color="primary"
             color="white"
             @click="changeDialogState(true), $refs.carousel.goTo(1)"
-            icon="playlist_add"
+            icon="note_add"
           />
           <q-fab-action
             push
@@ -151,6 +151,14 @@ export default {
           local: datum.sender_id._binaryString,
         });
       });
+    },
+    confirm() {
+      this.$q.dialog({
+        title: 'Confirme',
+        message: 'O nome do dispositivo é: ...',
+        cancel: true,
+        persistent: true,
+      }).onOk(() => {});
     },
   },
   data() {
