@@ -39,8 +39,7 @@ export function getRegistratorDevices({ commit }) {
 }
 
 export function autorizaLeitura({ commit }, payload) {
-  db.collection('devices')
-    .doc(payload)
+  db.collection('devices').doc(payload)
     .update({ mayRegister: true })
     .then(() => {
       Notify.create({
