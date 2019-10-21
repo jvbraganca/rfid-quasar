@@ -64,12 +64,12 @@ const menuList = [
     separator: false,
     link: '/devices',
   },
-  {
-    icon: 'face',
-    label: 'Usuários',
-    separator: false,
-    link: '/users',
-  },
+  // {
+  //   icon: 'face',
+  //   label: 'Usuários',
+  //   separator: false,
+  //   link: '/users',
+  // },
 ];
 
 export default {

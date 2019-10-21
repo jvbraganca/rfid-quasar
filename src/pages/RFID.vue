@@ -48,7 +48,7 @@
                     :options="options"
                     :option-label="label"
                     :option-value="value"
-                    label="Será usado para cadastro?"
+                    label="Selecione o dispositivo"
                     :rules="[val => !!val || 'Selecione um dispositivo']"
                   />
                 </div>
@@ -92,7 +92,7 @@
               class="q-gutter-xs"
             >
               <q-btn
-                flat color="orange" text-color="black" icon="arrow_left"
+                flat text-color="black" icon="arrow_left"
                 @click="$refs.carousel.previous()"
               />
               <q-btn
@@ -149,12 +149,17 @@ export default {
         this.populateLogbookTable();
       }
     });
+    this.$store.subscribe((mutation) => {
+      if (mutation.type === 'devices/setNewDeviceId') {
+        this.getRegistratorDevices();
+      }
+    });
+    this.getRegistratorDevices();
+    this.placeRegistratorDevicesOnOptions();
   },
   mounted() {
     this.getLogbookData();
     this.populateLogbookTable();
-    this.getRegistratorDevices();
-    this.placeRegistratorDevicesOnOptions();
   },
   computed: {
     ...mapState('logbook', ['logbookData', 'addUserDialog']),
@@ -162,7 +167,7 @@ export default {
   },
   methods: {
     ...mapActions('logbook', ['getLogbookData', 'changeDialogState']),
-    ...mapActions('devices', ['getRegistratorDevices', 'autorizaLeitura']),
+    ...mapActions('devices', ['getRegistratorDevices', 'autorizaLeitura', 'desautorizaLeitura']),
     // Função para pegar os dados do logbook e popular na tabela
     populateLogbookTable() {
       this.data = [];
@@ -178,6 +183,10 @@ export default {
     },
     changeRegisterState() {
       this.autorizaLeitura(this.dispositivoCadastro.value);
+      setTimeout(() => {
+        this.desautorizaLeitura(this.dispositivoCadastro.value);
+      }, 60000);
+      this.changeDialogState(false);
     },
     placeRegistratorDevicesOnOptions() {
       this.registratorsList.forEach((device) => {
