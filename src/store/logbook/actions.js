@@ -1,7 +1,7 @@
 import { db } from '../../firebase';
 
 export function getLogbookData({ commit }) {
-  db.collection('logbook').orderBy('timestamp', 'desc').onSnapshot((querySnapshot) => {
+  db.collection('logbook').orderBy('timestamp', 'desc').get().then((querySnapshot) => {
     const tempData = [];
     querySnapshot.forEach((doc) => {
       const data = {
@@ -14,4 +14,8 @@ export function getLogbookData({ commit }) {
     });
     commit('setLogbookData', tempData);
   });
+}
+
+export function changeDialogState({ commit }, payload) {
+  commit('dialogAddUser', payload);
 }

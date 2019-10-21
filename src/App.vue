@@ -1,6 +1,6 @@
 <template>
   <div class="q-gutter-md" id="q-app">
-    <q-layout view="hhh lpR lFf">
+    <q-layout view="hhh LpR fFf">
       <DrawerMenu/>
       <q-page-container>
         <q-page class="q-pa-md">
