@@ -7,7 +7,7 @@ w<template>
         :config="config"
         :data="data"
         :columns="columns"
-        :row-key="uid"
+        :row-key="this.data.uid"
         :pagination.sync="pagination"
       >
         <template v-slot:no-data="props">
@@ -39,6 +39,17 @@ w<template>
                   v-model="newDeviceName"
                   label="Nome do dispositivo"
                   aria-required="true"
+                  :rules="[val => !!val || 'Preenchimento obrigatório']"
+                />
+              </div>
+              <div class="q-pt-md">
+                <q-select
+                  v-model="registrator"
+                  :options="options"
+                  :option-label="label"
+                  :option-value="value"
+                  label="Será usado para cadastro?"
+                  :rules="[val => !!val || 'Seleção obrigatória']"
                 />
               </div>
             </q-card-section>
@@ -135,9 +146,11 @@ export default {
         },
         html: true,
       }).onOk(() => {
-        this.dialogAddDevice(this.newDeviceName);
+        this.addNewDevice([this.newDeviceName, this.registrator.value]);
         this.dialogAddDevice(false);
+        this.populateDevicesTable();
         this.newDeviceName = '';
+        this.registrator = '';
       });
     },
     confirmMessage() {
@@ -150,6 +163,17 @@ export default {
       pagination: {
         rowsPerPage: 10, // current rows per page being displayed
       },
+      registrator: '',
+      options: [
+        {
+          value: true,
+          label: 'Sim',
+        },
+        {
+          value: false,
+          label: 'Não',
+        },
+      ],
       columns: [
         {
           name: 'unique_id',
@@ -169,19 +193,11 @@ export default {
           format: val => `${val}`,
         },
         {
-          name: 'actions',
-          required: true,
-          label: 'Ação',
-          align: 'center',
-          field: row => row.timestamp,
-          format: val => `${val}`,
-        },
-        {
           name: 'timestamp',
           required: true,
           label: 'Último ping',
           align: 'right',
-          field: '',
+          field: row => row.timestamp,
           format: val => `${val}`,
         },
       ],

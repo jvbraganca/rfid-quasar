@@ -8,6 +8,7 @@ module.exports = function (ctx) {
     // --> boot files are part of "main.js"
     boot: [
       'main.js',
+      'addressbar-color',
     ],
 
     css: [
@@ -45,6 +46,8 @@ module.exports = function (ctx) {
       // Quasar plugins
       plugins: [
         'Dialog',
+        'Notify',
+        'AddressbarColor',
       ],
     },
 

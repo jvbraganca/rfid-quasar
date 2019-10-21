@@ -7,7 +7,7 @@
         :config="config"
         :data="data"
         :columns="columns"
-        :row-key="uid"
+        :row-key="this.data.uid"
         :pagination.sync="pagination"
       >
         <template v-slot:no-data="props">
@@ -30,31 +30,47 @@
           padding
           v-model="slide"
           style="width: 500px"
-          class="bg-white shadow-1 rounded-borders"
+          height="250px"
+          class="bg-white shadow-2 rounded-borders"
           ref="carousel"
         >
-          <q-carousel-slide :name="1" class="column no-wrap flex-center">
-            <q-icon name="style" color="primary" size="56px" />
-            <div class="q-mt-md text-center">
-             Alo
-            </div>
+          <q-carousel-slide :name="1" class="no-wrap flex-center">
+              <q-card>
+                <q-card-section class="bg-primary text-white">
+                  <div class="text-h6">Selecione o dispositivo para gravação</div>
+                </q-card-section>
+              </q-card>
+              <q-separator/>
+              <div class="col no-wrap flex-center">
+                <div class="q-pt-md">
+                  <q-select
+                    v-model="dispositivoCadastro"
+                    :options="options"
+                    :option-label="label"
+                    :option-value="value"
+                    label="Será usado para cadastro?"
+                    :rules="[val => !!val || 'Selecione um dispositivo']"
+                  />
+                </div>
+              </div>
           </q-carousel-slide>
-          <q-carousel-slide :name="2" class="column no-wrap flex-center">
-            <q-icon name="live_tv" color="primary" size="56px" />
-            <div class="q-mt-md text-center">
-              {{ lorem }}
-            </div>
-          </q-carousel-slide>
-          <q-carousel-slide :name="3" class="column no-wrap flex-center">
-            <q-icon name="layers" color="primary" size="56px" />
-            <div class="q-mt-md text-center">
-              {{ lorem }}
-            </div>
-          </q-carousel-slide>
-          <q-carousel-slide :name="4" class="column no-wrap flex-center">
-            <q-icon name="terrain" color="primary" size="56px" />
-            <div class="q-mt-md text-center">
-              {{ lorem }}
+          <q-carousel-slide :name="2" class="column no-wrap">
+              <q-card>
+                <q-card-section class="bg-primary text-white">
+                  <div class="text-h6">Habilite a gravação do cartão</div>
+                  <div class="text-subtitle2">{{ this.dispositivoCadastro.value }}</div>
+                </q-card-section>
+              </q-card>
+              <q-separator/>
+              <div class="col no-wrap text-center flex-center">
+                <div class="q-pt-xl">
+                  <q-btn
+                    flat
+                    color="positive"
+                    label="Habilitar leitura"
+                    @click="changeRegisterState"
+                  />
+                </div>
             </div>
           </q-carousel-slide>
           <template v-slot:control>
@@ -65,7 +81,7 @@
               <q-btn
                 flat
                 round
-                color="grey"
+                color="white"
                 icon="close"
                 @click="changeDialogState(false)"
               />
@@ -76,11 +92,14 @@
               class="q-gutter-xs"
             >
               <q-btn
-                push round dense color="orange" text-color="black" icon="arrow_left"
+                flat color="orange" text-color="black" icon="arrow_left"
                 @click="$refs.carousel.previous()"
               />
               <q-btn
-                push round dense color="orange" text-color="black" icon="arrow_right"
+                color="primary"
+                text-color="white"
+                label="Próximo"
+                icon-right="arrow_right"
                 @click="$refs.carousel.next()"
               />
             </q-carousel-control>
@@ -97,6 +116,7 @@
             color="white"
             @click="changeDialogState(true), $refs.carousel.goTo(1)"
             icon="note_add"
+            v-if="options != null"
           />
           <q-fab-action
             push
@@ -133,12 +153,16 @@ export default {
   mounted() {
     this.getLogbookData();
     this.populateLogbookTable();
+    this.getRegistratorDevices();
+    this.placeRegistratorDevicesOnOptions();
   },
   computed: {
     ...mapState('logbook', ['logbookData', 'addUserDialog']),
+    ...mapState('devices', ['registratorsList']),
   },
   methods: {
     ...mapActions('logbook', ['getLogbookData', 'changeDialogState']),
+    ...mapActions('devices', ['getRegistratorDevices', 'autorizaLeitura']),
     // Função para pegar os dados do logbook e popular na tabela
     populateLogbookTable() {
       this.data = [];
@@ -149,6 +173,17 @@ export default {
           card_id: datum.cardUid._binaryString,
           timestamp: moment.unix(datum.timestamp).format('llll'),
           local: datum.sender_id._binaryString,
+        });
+      });
+    },
+    changeRegisterState() {
+      this.autorizaLeitura(this.dispositivoCadastro.value);
+    },
+    placeRegistratorDevicesOnOptions() {
+      this.registratorsList.forEach((device) => {
+        this.options.push({
+          label: `${device.name} - ID: ${device.id}`,
+          value: device.id,
         });
       });
     },
@@ -163,6 +198,8 @@ export default {
   },
   data() {
     return {
+      dispositivoCadastro: '',
+      options: [],
       slide: 1,
       pagination: {
         rowsPerPage: 10, // current rows per page being displayed
